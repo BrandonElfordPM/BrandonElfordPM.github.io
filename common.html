@@ -1,0 +1,1388 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>common package &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="SimClass package" href="SimClass.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimClass.html" title="SimClass package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">common package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="common-package">
+<h1>common package<a class="headerlink" href="#common-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-common.defs">
+<span id="definitions"></span><h2>Definitions<a class="headerlink" href="#module-common.defs" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt id="common.defs.ACTIONS">
+<code class="sig-prename descclassname">common.defs.</code><code class="sig-name descname">ACTIONS</code><em class="property"> = ['Torque', 'Angle']</em><a class="headerlink" href="#common.defs.ACTIONS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ACTIONS</strong> – Names of the actions inside the environment. These are the outputs of the</p>
+</dd>
+</dl>
+<p>Neural Network.</p>
+<p>Angle   - control the steering angle of the wheels
+Torque  - control the torque of the motor</p>
+<p>We agreed not to control brakes using the neural network. Instead, the sambe Torque action
+will control both reversing and braking and another control system after RallyAI will 
+decide which to apply.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.defs.SIM_STATES">
+<code class="sig-prename descclassname">common.defs.</code><code class="sig-name descname">SIM_STATES</code><em class="property"> = ['Pos_X', 'Pos_Y', 'Yaw', 'Vel_X', 'Accel_X', 'steering', 'throttle']</em><a class="headerlink" href="#common.defs.SIM_STATES" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>SIM_STATES</strong> – Names of the states to be returned by SimClass implementations.</p>
+</dd>
+</dl>
+<p>This same list is used for returning the derivative of the states, if applied (acceleration
+will not return a derivative).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.defs.STATES">
+<code class="sig-prename descclassname">common.defs.</code><code class="sig-name descname">STATES</code><em class="property"> = ['Torque', 'Angle', 'Yaw', 'YawDot', 'Vx', 'AccelX', 'Desired_YawDot', 'Desired_Vx', 'Desired_AccelX']</em><a class="headerlink" href="#common.defs.STATES" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>STATES</strong> – Names of all the states inside the environment. These are the inputs of the</p>
+</dd>
+</dl>
+<p>Neural Network.</p>
+<p>We agreed not to use the user inputs directly as states, instead we can make use of a
+combination of sensor readings of the environment, and of the current state of the vehicle.</p>
+<p>The desired states come from a second simulation used as advisor - the user inputs will be
+the direct input of this advisor simulation.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.defs.USER_INPUTS">
+<code class="sig-prename descclassname">common.defs.</code><code class="sig-name descname">USER_INPUTS</code><em class="property"> = ['User_torque', 'User_brake', 'User_angle']</em><a class="headerlink" href="#common.defs.USER_INPUTS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>USER_INPUTS</strong> – Names of user inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-common.constants">
+<span id="constants"></span><h2>Constants<a class="headerlink" href="#module-common.constants" title="Permalink to this headline">¶</a></h2>
+<dl class="py data">
+<dt id="common.constants.advisor_accel_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_accel_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_accel_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_accel_std</strong> (<em>float</em>) – standard deviation for acceleration in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_accel_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_accel_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_accel_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>advisor_accel_weight</strong> – weight to apply to advisor reward for accurately following acceleration.</p></li>
+<li><p><strong>advisor_accel_weight</strong> – float</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_vel_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_vel_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_vel_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_vel_std</strong> (<em>float</em>) – standard deviation for velocity in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_vel_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_vel_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_vel_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>advisor_vel_weight</strong> – weight to apply to advisor reward for accurately following velocity.</p></li>
+<li><p><strong>advisor_vel_weight</strong> – float</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_x_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_x_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_x_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_x_std</strong> (<em>float</em>) – standard deviation for x in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_x_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_x_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_x_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_x_weight</strong> (<em>float</em>) – weight to apply to advisor reward for accurately following X position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_xdot_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_xdot_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_xdot_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_xdot_std</strong> (<em>float</em>) – standard deviation for derivative in X position in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_xdot_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_xdot_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_xdot_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>advisor_xdot_weight</strong> – weight to apply to advisor reward for accurately following X derivative.</p></li>
+<li><p><strong>advisor_xdot_weight</strong> – float</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_y_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_y_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_y_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_y_std</strong> (<em>float</em>) – standard deviation for y in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_y_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_y_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_y_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_y_weight</strong> (<em>float</em>) – weight to apply to advisor reward for accurately following Y position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_yaw_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_yaw_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_yaw_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_yaw_std</strong> (<em>float</em>) – standard deviation for yaw in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_yaw_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_yaw_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_yaw_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_yaw_weight</strong> (<em>float</em>) – weight to apply to advisor reward for accurately following yaw.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_yawdot_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_yawdot_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_yawdot_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_yawdot_std</strong> (<em>float</em>) – standard deviation for the derivative of yaw in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_yawdot_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_yawdot_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_yawdot_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_yawdot_weight</strong> (<em>float</em>) – weight to apply to advisor reward for accurately following Yaw derivative.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_ydot_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_ydot_std</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_ydot_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>advisor_ydot_std</strong> (<em>float</em>) – standard deviation for the derivative in Y position in advisor reward function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.advisor_ydot_weight">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">advisor_ydot_weight</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.advisor_ydot_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>advisor_ydot_weight</strong> – weight to apply to advisor reward for accurately following Y derivative.</p></li>
+<li><p><strong>advisor_ydot_weight</strong> – float</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.angle_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">angle_std</code><em class="property"> = 0.1</em><a class="headerlink" href="#common.constants.angle_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>angle_std</strong> (<em>float</em>) – standard deviation for angle mapping</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.constant_angle">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">constant_angle</code><em class="property"> = 0.0</em><a class="headerlink" href="#common.constants.constant_angle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>constant_angle</strong> – For constant user input, this is the value of angle.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.constant_brake">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">constant_brake</code><em class="property"> = 0.0</em><a class="headerlink" href="#common.constants.constant_brake" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>constant_brake</strong> – For constant user input, this is the value of brake.</p>
+</dd>
+</dl>
+<p>:type constant_brake. float</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.constant_torque">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">constant_torque</code><em class="property"> = 1.0</em><a class="headerlink" href="#common.constants.constant_torque" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>constant_torque</strong> (<em>float</em>) – For constant user input, this is the value of torque.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.constant_velocity">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">constant_velocity</code><em class="property"> = False</em><a class="headerlink" href="#common.constants.constant_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>constant_velocity</strong> (<em>float</em>) – Apply PID for constant velocity in simulation - ignore torque action.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.episode_length">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">episode_length</code><em class="property"> = 2000</em><a class="headerlink" href="#common.constants.episode_length" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>episode_length</strong> – Number of timesteps on a single episode. If input_source is</p>
+</dd>
+</dl>
+<p>set to ‘file’, this value will be replaced for the number of samples in the file.
+:type episode_length: integer</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.file_source">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">file_source</code><em class="property"> = '../../RallyAI_datasets/Raw_User_Input/Test_Cases/test_case_i.csv'</em><a class="headerlink" href="#common.constants.file_source" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_source</strong> (<em>string</em>) – File name of the input_source, if input_source is set to ‘file’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.first_gate">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">first_gate</code><em class="property"> = 1.0</em><a class="headerlink" href="#common.constants.first_gate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>first_gate</strong> (<em>float</em>) – Sets the location for the first gate (X direction for now)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.gate_dist">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">gate_dist</code><em class="property"> = 0.1</em><a class="headerlink" href="#common.constants.gate_dist" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_dist</strong> (<em>float</em>) – The distance between each gate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.gate_length">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">gate_length</code><em class="property"> = 1.0</em><a class="headerlink" href="#common.constants.gate_length" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_width</strong> (<em>float</em>) – Sets the length of the checkpoints (gate_length on either end of the centre)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.gate_std_x">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">gate_std_x</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.gate_std_x" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_std_x</strong> (<em>float</em>) – standard deviation for gate function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.gate_std_y">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">gate_std_y</code><em class="property"> = 1</em><a class="headerlink" href="#common.constants.gate_std_y" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_std_y</strong> (<em>float</em>) – standard deviation for gate function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.gate_width">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">gate_width</code><em class="property"> = 1.0</em><a class="headerlink" href="#common.constants.gate_width" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gate_width</strong> (<em>float</em>) – Sets the width of the checkpoints (gate_width on either side of the centre)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.initial_velocity">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">initial_velocity</code><em class="property"> = 10</em><a class="headerlink" href="#common.constants.initial_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>initial_velocity</strong> (<em>float</em>) – Simulation initial velocity.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.input_source">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">input_source</code><em class="property"> = 'file'</em><a class="headerlink" href="#common.constants.input_source" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_source</strong> (<em>string</em>) – Source from where the user input will be obtained, ‘file’ or ‘constant’.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.log">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">log</code><em class="property"> = False</em><a class="headerlink" href="#common.constants.log" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log</strong> (<em>boolean</em>) – True for logging to WandB, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.log_frequency">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">log_frequency</code><em class="property"> = 100</em><a class="headerlink" href="#common.constants.log_frequency" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>log_frequency</strong> (<em>integer</em>) – Number of time steps between logs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.lstm">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">lstm</code><em class="property"> = None</em><a class="headerlink" href="#common.constants.lstm" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>lstm</strong> (<em>int</em>) – Size of the lstm layer, if it exists.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.max_accel">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">max_accel</code><em class="property"> = 100</em><a class="headerlink" href="#common.constants.max_accel" title="Permalink to this definition">¶</a></dt>
+<dd><p>G-Wagon Simulation Parameters, from vehicle parameter excel sheet.
+:param maxAccel: Maximum possible acceleration of G Wagon body
+:type maxAccel: int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.max_vel">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">max_vel</code><em class="property"> = 100</em><a class="headerlink" href="#common.constants.max_vel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maxVel</strong> (<em>int</em>) – Maximum possible velocity of G Wagon body</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.max_wheel_angle">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">max_wheel_angle</code><em class="property"> = 35</em><a class="headerlink" href="#common.constants.max_wheel_angle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>max_wheel_angle</strong> (<em>float</em>) – Maximum steering angle in moving wheels, in degrees.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.max_wheel_change">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">max_wheel_change</code><em class="property"> = 0.5</em><a class="headerlink" href="#common.constants.max_wheel_change" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_wheel_change</strong> – Maximum change in steering angle in movin wheels, in degrees.</p></li>
+<li><p><strong>max_wheel_change</strong> – float</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.model_path">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">model_path</code><em class="property"> = None</em><a class="headerlink" href="#common.constants.model_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model_path</strong> – Set the name and path to the model to be loaded for testing or continue</p>
+</dd>
+</dl>
+<p>training.
+:type model_path: string</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.network_structure">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">network_structure</code><em class="property"> = [64, 64]</em><a class="headerlink" href="#common.constants.network_structure" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>network_structure</strong> (<em>List</em>) – Size of the layer or layers of the policy network. The value
+network will have the same sizes too.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.param_sheet_loc">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">param_sheet_loc</code><em class="property"> = '../../BasicSimulation/Development_spec_sheet.xlsx'</em><a class="headerlink" href="#common.constants.param_sheet_loc" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>param_sheet_loc</strong> – Excel sheet with initial parameters for the vehicle, like</p>
+</dd>
+</dl>
+<p>maximum velocity and acceleration.
+:type param_sheet_loc: string</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.policy_kwargs">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">policy_kwargs</code><em class="property"> = None</em><a class="headerlink" href="#common.constants.policy_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>policy_kwargs</strong> (<em>Dict</em>) – Arguments passed into the policies used from stable baselines</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.queue_length">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">queue_length</code><em class="property"> = (1000,)</em><a class="headerlink" href="#common.constants.queue_length" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>queue_length</strong> (<em>int</em>) – The number of gates in the queue, will stay constant because we append new gates as we travel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.randomize">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">randomize</code><em class="property"> = False</em><a class="headerlink" href="#common.constants.randomize" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>randomize</strong> (<em>boolean</em>) – True for training with domain randomization.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.run_on_aws">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">run_on_aws</code><em class="property"> = False</em><a class="headerlink" href="#common.constants.run_on_aws" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>run_on_aws</strong> (<em>boolean</em>) – True for running on AWS (no WandB logs, print instead)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.simulator_type">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">simulator_type</code><em class="property"> = 'c'</em><a class="headerlink" href="#common.constants.simulator_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of simulation we will use for this training / testing session.
+:param simulator_type: ‘c’ or ‘matlab’
+:type simulator_type: string</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.time_code">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">time_code</code><em class="property"> = False</em><a class="headerlink" href="#common.constants.time_code" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>time_code</strong> (<em>boolean</em>) – Determines if we want to log the run time of each code component.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.torque_std">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">torque_std</code><em class="property"> = 0.1</em><a class="headerlink" href="#common.constants.torque_std" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>torque_std</strong> (<em>float</em>) – standard deviation for torque mapping</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.vehicle">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">vehicle</code><em class="property"> = 'Newton'</em><a class="headerlink" href="#common.constants.vehicle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vehicle</strong> – Determines which vehicle (Gwagon or Newton) parameters</p>
+</dd>
+</dl>
+<p>will be used for training
+:type vehicle: string</p>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.w_advisor">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">w_advisor</code><em class="property"> = 0</em><a class="headerlink" href="#common.constants.w_advisor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w_advisor</strong> (<em>float</em>) – weight to apply to reward for accurate mimic of the advisor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.w_angle">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">w_angle</code><em class="property"> = 0</em><a class="headerlink" href="#common.constants.w_angle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w_angle</strong> (<em>float</em>) – Weight to apply to angle mapping for reward.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.w_gates">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">w_gates</code><em class="property"> = 0</em><a class="headerlink" href="#common.constants.w_gates" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w_gates</strong> (<em>float</em>) – Weight to apply to gate reward.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.w_torque">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">w_torque</code><em class="property"> = 0</em><a class="headerlink" href="#common.constants.w_torque" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w_torque</strong> (<em>float</em>) – Weight to apply to torque mapping for reward.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.wandb_proj_name">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">wandb_proj_name</code><em class="property"> = 'generic'</em><a class="headerlink" href="#common.constants.wandb_proj_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wandb_proj_name</strong> (<em>string</em>) – Weights &amp; Biases project name. Default is <strong>generic</strong>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.wandb_run_name">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">wandb_run_name</code><em class="property"> = ''</em><a class="headerlink" href="#common.constants.wandb_run_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>wandb_run_name</strong> (<em>string</em>) – Weights &amp; Biases run name. Empty string for a generic name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.whl_offset_x_front">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">whl_offset_x_front</code><em class="property"> = 0.834</em><a class="headerlink" href="#common.constants.whl_offset_x_front" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>whl_offset_x_front</strong> (<em>float</em>) – Distance from center of gravity to front tires.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.whl_offset_x_rear">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">whl_offset_x_rear</code><em class="property"> = 0.834</em><a class="headerlink" href="#common.constants.whl_offset_x_rear" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>whl_offset_x_rear</strong> (<em>float</em>) – Distance from center of gravity to rear tires.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.whl_offset_y_front">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">whl_offset_y_front</code><em class="property"> = 1.138</em><a class="headerlink" href="#common.constants.whl_offset_y_front" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>whl_offset_y_front</strong> (<em>float</em>) – Distance from center of gravity to front tires.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt id="common.constants.whl_offset_y_rear">
+<code class="sig-prename descclassname">common.constants.</code><code class="sig-name descname">whl_offset_y_rear</code><em class="property"> = 1.138</em><a class="headerlink" href="#common.constants.whl_offset_y_rear" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>whl_offset_y_rear</strong> (<em>float</em>) – Distance from center of gravity to rear tires.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="module-common.model">
+<span id="model-creation-and-training"></span><h3>Model creation and training<a class="headerlink" href="#module-common.model" title="Permalink to this headline">¶</a></h3>
+<p>RallyAI v0.2</p>
+<p>April 13, 2020</p>
+<dl class="py class">
+<dt id="common.model.LR_Callback">
+<em class="property">class </em><code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">LR_Callback</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.LR_Callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">stable_baselines.common.callbacks.BaseCallback</span></code></p>
+<p>Log to wandb the current value of learning rate.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.config_train">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">config_train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.config_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure training process according to a configuration file in JSON format.</p>
+<p>Most parameters are set directly inside common/constants. Some parameters however 
+must be returned due they are used for creating a new training session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config_file</strong> (<em>string</em>) – Configuration file in JSON format.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Set of parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.create_model">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">create_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env</span></em>, <em class="sig-param"><span class="n">alg</span></em>, <em class="sig-param"><span class="n">hyper_params</span></em>, <em class="sig-param"><span class="n">policy</span></em>, <em class="sig-param"><span class="n">timesteps</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">20200701</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.create_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes model and training environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env</strong> (<em>Gym environment</em>) – RallyAI environment.</p></li>
+<li><p><strong>alg</strong> (<em>string</em>) – Defines which algorithm to use in training.</p></li>
+<li><p><strong>hyper_params</strong> – hyper parameters specific for the corresponding algorithm.</p></li>
+<li><p><strong>policy</strong> (<em>RallyAI_Policy</em>) – Model policy.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random seed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The initialized model.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Stable baseline model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.create_saving_path">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">create_saving_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#common.model.create_saving_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the paths for saving new models and its corresponding 
+checkpoints.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.generateRunName">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">generateRunName</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">curr_name</span></em>, <em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.generateRunName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates run name, based off of config file, rather than manually defining.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>curr_name</strong> (<em>string</em>) – Current project name</p></li>
+<li><p><strong>data</strong> (<em>dict</em>) – Config file parameters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Run name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.get_file_num">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">get_file_num</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.get_file_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number of files inside this path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – Path where the files will be counted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.load_model">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alg</span></em>, <em class="sig-param"><span class="n">model_path</span></em>, <em class="sig-param"><span class="n">env</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load model from path to continue training or to test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alg</strong> (<em>string</em>) – Algorithm used to train the model to be loaded.</p></li>
+<li><p><strong>model_path</strong> (<em>string</em>) – Path to model that will be loaded.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.save_model">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">alg</span></em>, <em class="sig-param"><span class="n">timesteps</span></em>, <em class="sig-param"><span class="n">hyper_params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the model’s weights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>Stable baseline model</em>) – The initialized model.</p></li>
+<li><p><strong>alg</strong> (<em>string</em>) – Defines which algorithm to use in training.</p></li>
+<li><p><strong>timesteps</strong> – Number of steps to complete the training.</p></li>
+<li><p><strong>load_bool</strong> (<em>boolean</em>) – Determines if weights will be loaded before training.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.train_model">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">train_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">alg</span></em>, <em class="sig-param"><span class="n">timesteps</span></em>, <em class="sig-param"><span class="n">hyper_params</span></em>, <em class="sig-param"><span class="n">policy</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.model.train_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls initializer, trains and saves model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alg</strong> (<em>string</em>) – Defines which algorithm to use in training.</p></li>
+<li><p><strong>timesteps</strong> – Number of steps to complete the training.</p></li>
+<li><p><strong>hyper_params</strong> – List of hyper-parameters.</p></li>
+<li><p><strong>policy</strong> (<em>RallyAI_Policy</em>) – Model policy.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Time it takes to complete learning.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.model.update_params">
+<code class="sig-prename descclassname">common.model.</code><code class="sig-name descname">update_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#common.model.update_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the updated vehicle parameters from the excel sheet. Includes maximum acceleration, velocity, etc.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-common.reward_functions">
+<span id="reward-functions"></span><h3>Reward functions<a class="headerlink" href="#module-common.reward_functions" title="Permalink to this headline">¶</a></h3>
+<p>A single file which contains all reward functions. This includes test or trials, simplified and finalized reward functions.</p>
+<p>Build your own reward function by calling a combination of these functions, for instance, you can combine advisor with
+pure angle mapping.</p>
+<p>The following actions can be performed:
+===============                                        ===============
+Action                                                 Method
+===============                                        ===============
+Calc gaussian value                                    <a class="reference internal" href="#common.reward_functions.gaussian" title="common.reward_functions.gaussian"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gaussian()</span></code></a>
+Calc sigmoid value                                     <a class="reference internal" href="#common.reward_functions.sigmoid" title="common.reward_functions.sigmoid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sigmoid()</span></code></a>
+Calc hyperbolic cosine value                           <code class="xref py py-meth docutils literal notranslate"><span class="pre">arcosh()</span></code>
+Calc Euclidean distance between two points             <code class="xref py py-meth docutils literal notranslate"><span class="pre">euclidean_distance()</span></code>
+Compute the metrics used for evaluating performance    <a class="reference internal" href="#common.reward_functions.performanceMetrics" title="common.reward_functions.performanceMetrics"><code class="xref py py-meth docutils literal notranslate"><span class="pre">performanceMetrics()</span></code></a>
+Applies the MSR algorithm to the current step reward   <a class="reference internal" href="#common.reward_functions.msr" title="common.reward_functions.msr"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msr()</span></code></a>
+Calculates reward for torque mapping                   <a class="reference internal" href="#common.reward_functions.torque_map" title="common.reward_functions.torque_map"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torque_map()</span></code></a>
+Calculates reward for angle mapping                    <a class="reference internal" href="#common.reward_functions.angle_map" title="common.reward_functions.angle_map"><code class="xref py py-meth docutils literal notranslate"><span class="pre">angle_map()</span></code></a>
+Calculates reward for the advisor model                <a class="reference internal" href="#common.reward_functions.advisor_reward" title="common.reward_functions.advisor_reward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">advisor_reward()</span></code></a>
+Calculates reward for the gate model                   <a class="reference internal" href="#common.reward_functions.gate_reward" title="common.reward_functions.gate_reward"><code class="xref py py-meth docutils literal notranslate"><span class="pre">gate_reward()</span></code></a></p>
+<dl class="py function">
+<dt id="common.reward_functions.advisor_reward">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">advisor_reward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_sim</span></em>, <em class="sig-param"><span class="n">advisor_sim</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.advisor_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get reward for accurately following an advisor simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_sim</strong> (<a class="reference internal" href="SimClass.html#SimClass.SimClass.SimClass" title="SimClass.SimClass.SimClass"><em>SimClass</em></a>) – Simulation used for training agent.</p></li>
+<li><p><strong>advisor_sim</strong> (<a class="reference internal" href="SimClass.html#SimClass.SimClass.SimClass" title="SimClass.SimClass.SimClass"><em>SimClass</em></a>) – Simulation used as advisor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reward for accurately following the advisor, reward_info (logs for wandb).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.angle_map">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">angle_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actions</span></em>, <em class="sig-param"><span class="n">user_inputs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.angle_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reward as function of the quality map between user angle
+input and current actions suggested by the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> (<em>Pandas DataFrame</em>) – Current states inside the environment.</p></li>
+<li><p><strong>actions</strong> (<em>Pandas DataFrame</em>) – Neural Network actions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reward corresponding to the quality map.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.arccosh">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">arccosh</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.arccosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the arc hyperbolic cosine of (x+1)
+:param x: Number to take the arccosh of
+:type x: float, positive
+:return: arccosh(x+1)
+:rtype: float</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.euclidian_distance">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">euclidian_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p1</span></em>, <em class="sig-param"><span class="n">p2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.euclidian_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes Euclidian distance between two given points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p1</strong> (<em>list</em>) – Coordinate of point 1.</p></li>
+<li><p><strong>p2</strong> (<em>list</em>) – Coordinate of point 2.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Euclidian distance between p1 and p2.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.gate_reward">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">gate_reward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_t</span></em>, <em class="sig-param"><span class="n">y_t</span></em>, <em class="sig-param"><span class="n">gates</span></em>, <em class="sig-param"><span class="n">rewX_weight</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.gate_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute reward considering the distance between agent and closest gate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_t</strong> (<em>float</em>) – Current position in X.</p></li>
+<li><p><strong>y_t</strong> (<em>float</em>) – Current position in Y.</p></li>
+<li><p><strong>gates</strong> (<em>list</em>) – Set of checkpoints.</p></li>
+<li><p><strong>rewX_weight</strong> (<em>float</em>) – weight to apply for horizontal distance to gate. The 
+reward for vertical distance is its complement (1-rewX_weight)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reward, reward_info (logs for wandb).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float, dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.gaussian">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">gaussian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">mean</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">std</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Gaussian function of an input x, given its mean and standard deviation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>float</em>) – Input</p></li>
+<li><p><strong>mean</strong> (<em>float</em>) – Mean of gaussian function.</p></li>
+<li><p><strong>std</strong> (<em>float</em>) – Standard deviation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Gaussian of x</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.msr">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">msr</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">reward</span></em>, <em class="sig-param"><span class="n">prev_reward</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.msr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of magnify saltatory reward (MSR) from <a class="reference external" href="https://www.hindawi.com/journals/mpe/2019/7619483/">https://www.hindawi.com/journals/mpe/2019/7619483/</a>
+This script will magnify the step reward if, compared to the previous reward, it was a “good” or “bad” move (based solely on the size of the reward)
+If this step is sufficiently better, or worse, then the reward is magnified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reward</strong> (<em>float</em>) – Current step reward</p></li>
+<li><p><strong>prev_reward</strong> (<em>float</em>) – Reward from previous step</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Magnified reward or original reward</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.performanceMetrics">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">performanceMetrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_sim</span></em>, <em class="sig-param"><span class="n">advisor_sim</span></em>, <em class="sig-param"><span class="n">performance</span></em>, <em class="sig-param"><span class="n">currStep</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.performanceMetrics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the performance metrics for accurately following 
+an advisor simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_sim</strong> (<a class="reference internal" href="SimClass.html#SimClass.SimClass.SimClass" title="SimClass.SimClass.SimClass"><em>SimClass</em></a>) – Simulation used for training agent.</p></li>
+<li><p><strong>advisor_sim</strong> (<a class="reference internal" href="SimClass.html#SimClass.SimClass.SimClass" title="SimClass.SimClass.SimClass"><em>SimClass</em></a>) – Simulation used as advisor.</p></li>
+<li><p><strong>advisor_sim</strong> – Simulation used as advisor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>performance for accurately following the advisor.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>python dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.sigmoid">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">sigmoid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.sigmoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Sigmoid function of an input x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – Input</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="common.reward_functions.torque_map">
+<code class="sig-prename descclassname">common.reward_functions.</code><code class="sig-name descname">torque_map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actions</span></em>, <em class="sig-param"><span class="n">user_inputs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.reward_functions.torque_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reward as function of the quality map between user throttle
+input and current actions suggested by the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>states</strong> (<em>Pandas DataFrame</em>) – Current states inside the environment.</p></li>
+<li><p><strong>actions</strong> (<em>Pandas DataFrame</em>) – Neural Network actions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reward corresponding to the quality map.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-common.input_manager">
+<span id="class-input-manager"></span><h3>Class input_manager<a class="headerlink" href="#module-common.input_manager" title="Permalink to this headline">¶</a></h3>
+<dl class="py class">
+<dt id="common.input_manager.input_manager">
+<em class="property">class </em><code class="sig-prename descclassname">common.input_manager.</code><code class="sig-name descname">input_manager</code><a class="headerlink" href="#common.input_manager.input_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Get input values for throttle, brake and steering wheel angle.</p>
+<dl class="py method">
+<dt id="common.input_manager.input_manager.get_next">
+<em class="property">abstract </em><code class="sig-name descname">get_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#common.input_manager.input_manager.get_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next observation [User_throttle, User_brake, User_angle].</p>
+<dl class="simple">
+<dt>Normalize values in range [-1, 1]:</dt><dd><ul class="simple">
+<li><p>User_throttle: -1 –&gt; No throttle,     1 –&gt; Full throttle</p></li>
+<li><p>User_brake:    -1 –&gt; No brake,        1 –&gt; Full brake</p></li>
+<li><p>User_angle:    -1 –&gt; max left turn,   1 –&gt; max right turn</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the current observation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="class-input-constant">
+<h2>Class input_constant<a class="headerlink" href="#class-input-constant" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="common.input_manager.input_constant">
+<em class="property">class </em><code class="sig-prename descclassname">common.input_manager.</code><code class="sig-name descname">input_constant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">throttle</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">brake</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">angle</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_factor</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.input_manager.input_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#common.input_manager.input_manager" title="common.input_manager.input_manager"><code class="xref py py-class docutils literal notranslate"><span class="pre">common.input_manager.input_manager</span></code></a></p>
+<p>Constant user input class.</p>
+<p>Use this class when you need to train on input values for the full episode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>throttle</strong> (<em>float</em>) – Constant value for throttle in range [-1,1] for [backward, forward]</p></li>
+<li><p><strong>brake</strong> (<em>float</em>) – Constant value for brake in range [-1,1] for [no brake, brake]</p></li>
+<li><p><strong>angle</strong> (<em>float</em>) – Constant value for angle in range [-1,1] for [max angle to left, max angle to right]</p></li>
+<li><p><strong>max_factor</strong> (<em>float</em>) – When None, the values of throttle, brake and angle will be the only output,
+When max_factor != 0, the value of throttle, brake and angle will be random
+in range [-throttle,throttle], [-brake,brake] and [-angle,angle]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="common.input_manager.input_constant.get_next">
+<code class="sig-name descname">get_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#common.input_manager.input_constant.get_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next observation [User_throttle, User_brake, User_angle].</p>
+<dl class="simple">
+<dt>Normalize values in range [-1, 1]:</dt><dd><ul class="simple">
+<li><p>User_throttle: -1 –&gt; No throttle,     1 –&gt; Full throttle</p></li>
+<li><p>User_brake:    -1 –&gt; No brake,        1 –&gt; Full brake</p></li>
+<li><p>User_angle:    -1 –&gt; max left turn,   1 –&gt; max right turn</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the current observation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="class-input-from-file">
+<h2>Class input_from_file<a class="headerlink" href="#class-input-from-file" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="common.input_manager.input_from_file">
+<em class="property">class </em><code class="sig-prename descclassname">common.input_manager.</code><code class="sig-name descname">input_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_values</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_factor</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.input_manager.input_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#common.input_manager.input_manager" title="common.input_manager.input_manager"><code class="xref py py-class docutils literal notranslate"><span class="pre">common.input_manager.input_manager</span></code></a></p>
+<p>Input CSV file from where we will read input data.</p>
+<dl class="simple">
+<dt>The file must have the following columns:</dt><dd><ul class="simple">
+<li><p>Throttle</p></li>
+<li><p>Steering</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>string</em>) – Name of the CSV file with input values.</p></li>
+<li><p><strong>shuffle</strong> (<em>boolean.</em>) – True to shuffle the samples read from file.</p></li>
+<li><p><strong>max_values</strong> – Max value of throttle, brake and angle, in that specific order.</p></li>
+<li><p><strong>max_values</strong> – [float]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="common.input_manager.input_from_file.get_next">
+<code class="sig-name descname">get_next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#common.input_manager.input_from_file.get_next" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next observation [User_throttle, User_brake, User_angle].</p>
+<dl class="simple">
+<dt>Normalize values in range [-1, 1]:</dt><dd><ul class="simple">
+<li><p>User_throttle: -1 –&gt; No throttle,     1 –&gt; Full throttle</p></li>
+<li><p>User_angle:    -1 –&gt; max left turn,   1 –&gt; max right turn</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dictionary with the current observation.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="custom-policies">
+<h3>Custom policies<a class="headerlink" href="#custom-policies" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="_images/rl-model.png"><img alt="Policy model" src="_images/rl-model.png" style="width: 1200px;" /></a>
+</div>
+</div>
+<div class="section" id="module-common.policies">
+<span id="class-rallyaipolicy"></span><h2>Class RallyAIPolicy<a class="headerlink" href="#module-common.policies" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="common.policies.RallyAIPolicy">
+<em class="property">class </em><code class="sig-prename descclassname">common.policies.</code><code class="sig-name descname">RallyAIPolicy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sess</span></em>, <em class="sig-param"><span class="n">ob_space</span></em>, <em class="sig-param"><span class="n">ac_space</span></em>, <em class="sig-param"><span class="n">n_env</span></em>, <em class="sig-param"><span class="n">n_steps</span></em>, <em class="sig-param"><span class="n">n_batch</span></em>, <em class="sig-param"><span class="n">reuse</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.RallyAIPolicy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">stable_baselines.common.policies.ActorCriticPolicy</span></code></p>
+<p>RallyAI Generic Policy. This policy cannot be instanced, it must be implemented to build the model
+inside the constructor.</p>
+<dl class="py method">
+<dt id="common.policies.RallyAIPolicy.proba_step">
+<code class="sig-name descname">proba_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.RallyAIPolicy.proba_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the action probability for a single step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> – ([float] or [int]) The current observation of the environment</p></li>
+<li><p><strong>state</strong> – ([float]) The last states (used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – ([float]) The last masks (used in recurrent policies)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>([float]) the action probability</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="common.policies.RallyAIPolicy.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">deterministic</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.RallyAIPolicy.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the policy for a single step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> – ([float] or [int]) The current observation of the environment</p></li>
+<li><p><strong>state</strong> – ([float]) The last states (used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – ([float]) The last masks (used in recurrent policies)</p></li>
+<li><p><strong>deterministic</strong> – (bool) Whether or not to return deterministic actions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>([float], [float], [float], [float]) actions, values, states, neglogp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="common.policies.RallyAIPolicy.value">
+<code class="sig-name descname">value</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obs</span></em>, <em class="sig-param"><span class="n">state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.RallyAIPolicy.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value for a single step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obs</strong> – ([float] or [int]) The current observation of the environment</p></li>
+<li><p><strong>state</strong> – ([float]) The last states (used in recurrent policies)</p></li>
+<li><p><strong>mask</strong> – ([float]) The last masks (used in recurrent policies)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>([float]) The associated value of the action</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="class-fcn-policy">
+<h2>Class fcn_policy<a class="headerlink" href="#class-fcn-policy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="common.policies.fcn_policy">
+<em class="property">class </em><code class="sig-prename descclassname">common.policies.</code><code class="sig-name descname">fcn_policy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sess</span></em>, <em class="sig-param"><span class="n">ob_space</span></em>, <em class="sig-param"><span class="n">ac_space</span></em>, <em class="sig-param"><span class="n">n_env</span></em>, <em class="sig-param"><span class="n">n_steps</span></em>, <em class="sig-param"><span class="n">n_batch</span></em>, <em class="sig-param"><span class="n">reuse</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.fcn_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">stable_baselines.common.policies.FeedForwardPolicy</span></code></p>
+<p>RallyAI Policy implementation for a model with fully connected layers only.</p>
+<p>You can change number of hidden layers and their sizes in the call to model_fcn function,
+parameter called ‘hidden_layers’.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="class-mlp-lstm-policy">
+<h2>Class mlp_lstm_policy<a class="headerlink" href="#class-mlp-lstm-policy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="common.policies.mlp_lstm_policy">
+<em class="property">class </em><code class="sig-prename descclassname">common.policies.</code><code class="sig-name descname">mlp_lstm_policy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sess</span></em>, <em class="sig-param"><span class="n">ob_space</span></em>, <em class="sig-param"><span class="n">ac_space</span></em>, <em class="sig-param"><span class="n">n_env</span></em>, <em class="sig-param"><span class="n">n_steps</span></em>, <em class="sig-param"><span class="n">n_batch</span></em>, <em class="sig-param"><span class="n">reuse</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">_kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#common.policies.mlp_lstm_policy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">stable_baselines.common.policies.LstmPolicy</span></code></p>
+<p>Policy object that implements actor critic, using LSTMs with an MLP feature extraction</p>
+<p>You can modify the sizes of the hidden networks by modifying the numbers inside net_arch
+and n_lstm parameters. This policy design MUST have a shared layer between policy and
+value networks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sess</strong> – (TensorFlow session) The current TensorFlow session</p></li>
+<li><p><strong>ob_space</strong> – (Gym Space) The observation space of the environment</p></li>
+<li><p><strong>ac_space</strong> – (Gym Space) The action space of the environment</p></li>
+<li><p><strong>n_env</strong> – (int) The number of environments to run</p></li>
+<li><p><strong>n_steps</strong> – (int) The number of steps to run for each environment</p></li>
+<li><p><strong>n_batch</strong> – (int) The number of batch to run (n_envs * n_steps)</p></li>
+<li><p><strong>reuse</strong> – (bool) If the policy is reusable or not</p></li>
+<li><p><strong>kwargs</strong> – (dict) Extra keyword arguments for the MLP feature extraction</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">common package</a><ul>
+<li><a class="reference internal" href="#module-common.defs">Definitions</a></li>
+<li><a class="reference internal" href="#module-common.constants">Constants</a><ul>
+<li><a class="reference internal" href="#module-common.model">Model creation and training</a></li>
+<li><a class="reference internal" href="#module-common.reward_functions">Reward functions</a></li>
+<li><a class="reference internal" href="#module-common.input_manager">Class input_manager</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-input-constant">Class input_constant</a></li>
+<li><a class="reference internal" href="#class-input-from-file">Class input_from_file</a><ul>
+<li><a class="reference internal" href="#custom-policies">Custom policies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-common.policies">Class RallyAIPolicy</a></li>
+<li><a class="reference internal" href="#class-fcn-policy">Class fcn_policy</a></li>
+<li><a class="reference internal" href="#class-mlp-lstm-policy">Class mlp_lstm_policy</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SimClass.html"
+                        title="previous chapter">SimClass package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/common.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimClass.html" title="SimClass package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">common package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

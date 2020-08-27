@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Training &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing" href="test.html" />
+    <link rel="prev" title="Configuration" href="config.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Training</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="training">
+<h1>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h1>
+<p>To train RallyAI, we load the configuration parameters, build our custom gym environment and use the simulation and learning algorithm to train the policy network based off the reward function. To begin this process, navigate to <code class="docutils literal notranslate"><span class="pre">/RallyAI_v2/RL_Training/</span></code> and run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python train.py
+</pre></div>
+</div>
+<p>The train logs the information to W&amp;B based off of your project name and run name.</p>
+<div class="section" id="configuration-parameters">
+<h2>Configuration parameters<a class="headerlink" href="#configuration-parameters" title="Permalink to this headline">¶</a></h2>
+<p>This is a list of the main paramenter in the configuration JSON file. Some of these parameters are also a dictionary, and will be defined in the following sections.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Main parameters on config file</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>timesteps</p></td>
+<td><p>Training time steps</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_agents</p></td>
+<td><p>Number of agents to train with</p></td>
+</tr>
+<tr class="row-even"><td><p>network_structure</p></td>
+<td><p>Parameters configuring the neural network type and structure</p></td>
+</tr>
+<tr class="row-odd"><td><p>input_source</p></td>
+<td><p>Parameters configuring the input source (constant or file)</p></td>
+</tr>
+<tr class="row-even"><td><p>randomize</p></td>
+<td><p>Apply domain randomization</p></td>
+</tr>
+<tr class="row-odd"><td><p>run_on_aws</p></td>
+<td><p>Run on aws (log to console instead of wandb)</p></td>
+</tr>
+<tr class="row-even"><td><p>wandb_params</p></td>
+<td><p>Parameters for logging to WandB</p></td>
+</tr>
+<tr class="row-odd"><td><p>algorithm</p></td>
+<td><p>Training algorithm: “ppo2”, “a2c” or “acktr”</p></td>
+</tr>
+<tr class="row-even"><td><p>hyper_params</p></td>
+<td><p>Training algorithm-related hyper parameters. “null” for default values.</p></td>
+</tr>
+<tr class="row-odd"><td><p>reward</p></td>
+<td><p>Reward-building</p></td>
+</tr>
+<tr class="row-even"><td><p>load_model_path</p></td>
+<td><p>Path to existing model for re-training. “null” to create a new model.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="network-structure-dictionary">
+<h3>network_structure dictionary<a class="headerlink" href="#network-structure-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>You can configure your Neural Network structure inside this dictionary. There are some policy types available currently. The number of hidden layers, and the number of units on each hidden layer are also configured here.</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">network_structure dictionary</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>policy_type</p></td>
+<td><p>NN structure to use (fcn, MlpPolicy)</p></td>
+</tr>
+<tr class="row-odd"><td><p>architecture</p></td>
+<td><p>Size of hidden layers in fcn or MlpPolicies policies</p></td>
+</tr>
+<tr class="row-even"><td><p>lstm</p></td>
+<td><p>Size of lstm layer. None if you don’t want this layer</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="input-source-dictionary">
+<h3>input_source dictionary<a class="headerlink" href="#input-source-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>Define where we will get the user input from. Currently we have two modes: input from file and constant input. If you want to use a file, set its name (full path) on <em>input_file</em> parameter. For constant input, set <em>input_file</em> to “constant” and configure the constant input on <em>constant_torque</em>, <em>constant_brake</em> and <em>constant_angle</em> parameters.</p>
+<p>This dictionary let you configure the initial parameters of the simulation too.</p>
+<table class="colwidths-given docutils align-default" id="id3">
+<caption><span class="caption-text">input_source dictionary</span><a class="headerlink" href="#id3" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_file</p></td>
+<td><p>File to read the input from, “constant” for using a constant value instead</p></td>
+</tr>
+<tr class="row-odd"><td><p>episode_length</p></td>
+<td><p>null for using file length as episode length. Otherwise, set file length here</p></td>
+</tr>
+<tr class="row-even"><td><p>vehicle</p></td>
+<td><p>Newton or Gwagon - different configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>initial_velocity</p></td>
+<td><p>Initial velocity on simulation</p></td>
+</tr>
+<tr class="row-even"><td><p>constant_velocity</p></td>
+<td><p>True for constant velocity on simulation (ignore torque)</p></td>
+</tr>
+<tr class="row-odd"><td><p>constant_torque</p></td>
+<td><p>When “constant” input, this is the value of torque</p></td>
+</tr>
+<tr class="row-even"><td><p>constant brake</p></td>
+<td><p>When “constant” input, this is the value of brake</p></td>
+</tr>
+<tr class="row-odd"><td><p>constant_angle</p></td>
+<td><p>When “constant” input, this is the value of angle</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="wandb-params-dictionary">
+<h3>wandb_params dictionary<a class="headerlink" href="#wandb-params-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>Logs your current training information to Weights and Biases ‘<a class="reference external" href="https://www.wandb.com/'_">https://www.wandb.com/’_</a>.</p>
+<p><em>NOTE</em>: You can configure the run name in this dictionary. However, if you need a fuller name, containing every configuration of your current training, set the variable <em>GEN_RUN_NAME</em> to True inside common/model.py.</p>
+<table class="colwidths-given docutils align-default" id="id4">
+<caption><span class="caption-text">wandb_params dictionary</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>log_to_wandb</p></td>
+<td><p>True for logging to WandB</p></td>
+</tr>
+<tr class="row-odd"><td><p>log_frequency</p></td>
+<td><p>Log every N time steps</p></td>
+</tr>
+<tr class="row-even"><td><p>run_name</p></td>
+<td><p>Run name inside WandB</p></td>
+</tr>
+<tr class="row-odd"><td><p>proj_name</p></td>
+<td><p>Project name inside WandB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="reward-dictionary">
+<h3>reward dictionary<a class="headerlink" href="#reward-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>You can build your own reward by combining the following options:</p>
+<ul class="simple">
+<li><p><strong>MSR</strong> Magnify Saltatory Reward ‘<a class="reference external" href="https://www.hindawi.com/journals/mpe/2019/7619483/'_">https://www.hindawi.com/journals/mpe/2019/7619483/’_</a></p></li>
+<li><p><strong>Torque mapping</strong>. Map throttle user input to the action proposed by the Neural Network.</p></li>
+<li><p><strong>Angle mapping</strong>. Map angle user input to the action proposed by the Neural Network.</p></li>
+<li><p><strong>Advisor reward</strong>. Use our additional simulation as advisor to compute the reward function. Here you can build your own advisor reward by combining a set of state mappings.</p></li>
+<li><p><strong>Gate reward</strong>. Use a moving checkpoint to reward the agent when getting closer to it.</p></li>
+</ul>
+<p><em>NOTE</em>: Every standard deviation in the following table can either be a floating number or a list of numbers. When using a list of numbers, Curriculum Learning (CL) will be applied. CL means that when the agent reaches a certain reward threshold, the next standard deviation will be applied, making the problem slightly harder and therefore, fine tuning our current results.</p>
+<table class="colwidths-given docutils align-default" id="id5">
+<caption><span class="caption-text">reward dictionary</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>reward</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>msr</p></td>
+<td><p>true for applying MSR to your reward. False otherwise</p></td>
+</tr>
+<tr class="row-odd"><td><p>epsilon</p></td>
+<td><p>For MSR, the value of epsilon (it is commonly a very small value)</p></td>
+</tr>
+<tr class="row-even"><td><p>nu</p></td>
+<td><p>For MSR, the value of nu (2, 3, 4, 5 are common values)</p></td>
+</tr>
+<tr class="row-odd"><td><p>torque</p></td>
+<td><p>initial standard deviation for torque map</p></td>
+</tr>
+<tr class="row-even"><td><p>w_torque</p></td>
+<td><p>weight for torque map in the reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>angle</p></td>
+<td><p>initial standard deviation for angle map</p></td>
+</tr>
+<tr class="row-even"><td><p>w_angle</p></td>
+<td><p>weight for angle map in the reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>w_advisor</p></td>
+<td><p>weight for the advisor reward function</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_x_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s x position</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_y_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s y position</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_yaw_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s yaw value</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_vel_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s velocity</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_accel_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s acceleration</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor xdot_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s change in x position</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor ydot_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s change in y position</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor yawdot_std</p></td>
+<td><p>Standard deviation for accurately mimicking advisor’s change in yaw</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_x_weight</p></td>
+<td><p>Weight for the advisor’s X position</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_y_weight</p></td>
+<td><p>Weight for the advisor’s Y position</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_yaw_weight</p></td>
+<td><p>Weight for the advisor’s yaw</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_vel_weight</p></td>
+<td><p>Weight for the advisor’s velocity</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_accel_weight</p></td>
+<td><p>Weight for the advisor’s acceleration</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_xdot_weight</p></td>
+<td><p>Weight for the advisor’s change in X position</p></td>
+</tr>
+<tr class="row-even"><td><p>advisor_ydot_weight</p></td>
+<td><p>Weight for the advisor’s change in Y position</p></td>
+</tr>
+<tr class="row-odd"><td><p>advisor_yawdot_weight</p></td>
+<td><p>Weight for the advisor’s change in yaw</p></td>
+</tr>
+<tr class="row-even"><td><p>w_gate</p></td>
+<td><p>weight for the checkpoints reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>gate_std_x</p></td>
+<td><p>Standard deviation for accurately passing the checkpoint in X positon</p></td>
+</tr>
+<tr class="row-even"><td><p>gate_std_y</p></td>
+<td><p>Standard deviation for accurately passing the checkpoint in Y position</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hyper-params-dictionary">
+<h3>hyper-params dictionary<a class="headerlink" href="#hyper-params-dictionary" title="Permalink to this headline">¶</a></h3>
+<p>Hyper parameters depend on the algorithm you chose to train. Check stable baselines documentation for a deeper explanation. ‘<a class="reference external" href="https://stable-baselines.readthedocs.io/en/master/'_">https://stable-baselines.readthedocs.io/en/master/’_</a></p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Training</a><ul>
+<li><a class="reference internal" href="#configuration-parameters">Configuration parameters</a><ul>
+<li><a class="reference internal" href="#network-structure-dictionary">network_structure dictionary</a></li>
+<li><a class="reference internal" href="#input-source-dictionary">input_source dictionary</a></li>
+<li><a class="reference internal" href="#wandb-params-dictionary">wandb_params dictionary</a></li>
+<li><a class="reference internal" href="#reward-dictionary">reward dictionary</a></li>
+<li><a class="reference internal" href="#hyper-params-dictionary">hyper-params dictionary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="config.html"
+                        title="previous chapter">Configuration</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="next chapter">Testing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/train.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="config.html" title="Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Training</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

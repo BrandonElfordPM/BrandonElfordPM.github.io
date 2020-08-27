@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuration &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Training" href="train.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Training"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>Now that all necessary packages are installed, we will outline how to configure and tune your experiments.</p>
+<p>The configuration file is located at <code class="docutils literal notranslate"><span class="pre">RallyAI_v2/RL_Training/config/simple_train.json</span></code>. Inside the file you will see a dictionary of dictionaries, defining multiple variables which will affect the training. The tables below are different sections from this config file.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>timesteps</p></td>
+<td><p>int</p></td>
+<td><p>(0,inf)</p></td>
+<td><p>Total number of timesteps for this training session</p></td>
+</tr>
+<tr class="row-odd"><td><p>num_agents</p></td>
+<td><p>int</p></td>
+<td><p>(0,inf)</p></td>
+<td><p>The number of agents running in parallel</p></td>
+</tr>
+<tr class="row-even"><td><p>randomize</p></td>
+<td><p>bool</p></td>
+<td><p>N/A</p></td>
+<td><p>Defining if randomization is used for user states</p></td>
+</tr>
+<tr class="row-odd"><td><p>run_on_aws</p></td>
+<td><p>bool</p></td>
+<td><p>N/A</p></td>
+<td><p>Defines if we are running on AWS</p></td>
+</tr>
+<tr class="row-even"><td><p>algorithm</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td><p>Determines what algorithm to use (stablebaselines)</p></td>
+</tr>
+<tr class="row-odd"><td><p>load_model_path</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td><p>Location and name of zip file to load weights from</p></td>
+</tr>
+</tbody>
+</table>
+<p>The ‘Network structure’ table defines the architecture of the nueral network. Note that the param ‘architecture’ is a list which defines the dimension and number of hidden layers only.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 11%" />
+<col style="width: 7%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param (Network structure)</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>policy_type</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td><p>Type of model type (i.e. “fcn”, “lstm”, etc)</p></td>
+</tr>
+<tr class="row-odd"><td><p>architecture</p></td>
+<td><p>list, int</p></td>
+<td><p>(0,inf)</p></td>
+<td><p>Structure of policy (hidden) layers</p></td>
+</tr>
+<tr class="row-even"><td><p>lstm</p></td>
+<td></td>
+<td><p>N/A</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>policy_kwargs</p></td>
+<td></td>
+<td><p>N/A</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The ‘Input source’ table contains parameters regarding how the simulation/vehicle are controlled. The ‘input_file’ is the style of the file used to for controls. For example, “constant” will select a constant value for the user inputs.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 6%" />
+<col style="width: 22%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param (Input source)</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>input_file</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>episode_length</p></td>
+<td><p>int</p></td>
+<td><p>(0,inf)</p></td>
+<td><p>Number of steps or length of input file</p></td>
+</tr>
+<tr class="row-even"><td><p>vehicle</p></td>
+<td><p>str</p></td>
+<td><p>‘Newton’ or ‘GWagon’</p></td>
+<td><p>Vehicle parameters used in simulation</p></td>
+</tr>
+</tbody>
+</table>
+<p>The WandB parameters are used for logging information to the Weights &amp; Biases services.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param (WandB)</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>wandb_params/log_to_wandb</p></td>
+<td><p>bool</p></td>
+<td><p>N/A</p></td>
+<td><p>Defines if the training data will be logged to W&amp;B</p></td>
+</tr>
+<tr class="row-odd"><td><p>wandb_params/log_frequency</p></td>
+<td><p>int</p></td>
+<td><p>(0,inf)</p></td>
+<td><p>How frequently the data is sent to W&amp;B</p></td>
+</tr>
+<tr class="row-even"><td><p>wandb_params/run_name</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td><p>Name used for W&amp;B run, also for saving weights</p></td>
+</tr>
+<tr class="row-odd"><td><p>wandb_params/proj_name</p></td>
+<td><p>str</p></td>
+<td><p>N/A</p></td>
+<td><p>Name used for W&amp;B project, also for saving weights</p></td>
+</tr>
+<tr class="row-even"><td><p>wandb_params/time_code</p></td>
+<td><p>bool</p></td>
+<td><p>N/A</p></td>
+<td><p>Defines wether or not to time sections of code</p></td>
+</tr>
+</tbody>
+</table>
+<p>The below parameter directly relate with the algorithm that is chosen for training. Since we mostly use PPO, those params is what we have listed below. Additionally, the ranges given below are also only applicable for PPO. A more detailed explanation of the hyperparameters can be found <a class="reference external" href="https://medium.com/aureliantactics/ppo-hyperparameters-and-ranges-6fc2d29bccbe">here</a>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 6%" />
+<col style="width: 14%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param (Hyperparameters)</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>hyperparams/learning_rate_start</p></td>
+<td><p>float</p></td>
+<td><p>[0.003, 5e-6]</p></td>
+<td><p>Initial learning rate</p></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/learning_rate_end</p></td>
+<td><p>float</p></td>
+<td><p>[0.003, 5e-6]</p></td>
+<td><p>Final learning rate (less than or equal to init lr)</p></td>
+</tr>
+<tr class="row-even"><td><p>hyperparams/gamma</p></td>
+<td><p>float</p></td>
+<td><p>[0.8,0.9997]</p></td>
+<td><p>Discount Factor Gamma</p></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/vf_coef</p></td>
+<td><p>float</p></td>
+<td><p>[0.5,1]</p></td>
+<td><p>Value Function Coefficient Range</p></td>
+</tr>
+<tr class="row-even"><td><p>hyperparams/ent_coef</p></td>
+<td><p>float</p></td>
+<td><p>[0,0.01]</p></td>
+<td><p>Entropy Coefficient</p></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/lam</p></td>
+<td><p>float</p></td>
+<td><p>[0.9,1]</p></td>
+<td><p>GAE Parameter Lambda</p></td>
+</tr>
+<tr class="row-even"><td><p>hyperparams/cliprange</p></td>
+<td><p>float</p></td>
+<td><p>{0.1,0.2,0.3}</p></td>
+<td><p>Clipping</p></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/noptepochs</p></td>
+<td><p>int</p></td>
+<td><p>[3,30]</p></td>
+<td><p>Epochs</p></td>
+</tr>
+<tr class="row-even"><td><p>hyperparams/nminibatches</p></td>
+<td><p>int</p></td>
+<td><p>[4,4096]</p></td>
+<td><p>Minibatch</p></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/n_steps</p></td>
+<td><p>int</p></td>
+<td><p>[32,5000]</p></td>
+<td><p>Horizon</p></td>
+</tr>
+<tr class="row-even"><td><p>hyperparams/max_grad_norm</p></td>
+<td><p>float</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>hyperparams/verbose</p></td>
+<td><p>int</p></td>
+<td><p>{0,1,2}</p></td>
+<td><p>Amount of detail in algorithm output</p></td>
+</tr>
+</tbody>
+</table>
+<p>Lastly, the reward parameters are in the table below. The reward functions that are being tested currently are split into sections, with the weight of each model followed by the standard deviation (std) of each parameter used in said model.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 6%" />
+<col style="width: 7%" />
+<col style="width: 54%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Param (Reward)</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Range</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>reward/w_torque</p></td>
+<td><p>float</p></td>
+<td><p>[0,1]</p></td>
+<td><p>Weight of torque model in reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>reward/torque</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for torque</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>reward/w_angle</p></td>
+<td><p>float</p></td>
+<td><p>[0,1]</p></td>
+<td><p>Weight of angle model in reward function</p></td>
+</tr>
+<tr class="row-even"><td><p>reward/angle</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for angle</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>reward/w_advisor</p></td>
+<td><p>float</p></td>
+<td><p>[0,1]</p></td>
+<td><p>Weight of advisor model in reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>reward/advisor_yaw_std</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for yaw</p></td>
+</tr>
+<tr class="row-even"><td><p>reward/advisor_vel_std</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for velocity</p></td>
+</tr>
+<tr class="row-odd"><td><p>reward/advisor_x_std</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for X position difference</p></td>
+</tr>
+<tr class="row-even"><td><p>reward/advisor_y_std</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for Y position difference</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>reward/w_gates</p></td>
+<td><p>float</p></td>
+<td><p>[0,1]</p></td>
+<td><p>Weight of gate model in reward function</p></td>
+</tr>
+<tr class="row-odd"><td><p>reward/gate_std_x</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for X position difference</p></td>
+</tr>
+<tr class="row-even"><td><p>reward/gate_std_y</p></td>
+<td><p>list</p></td>
+<td><p>[0,inf)</p></td>
+<td><p>Std used in gaussian for Y position difference</p></td>
+</tr>
+</tbody>
+</table>
+<p>Once your confirguration file is as you like it, you can easily begin training RallyAI, which is described in the next section.</p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="train.html"
+                        title="next chapter">Training</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/config.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="train.html" title="Training"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Environment &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setup of W&amp;B" href="wandb.html" />
+    <link rel="prev" title="Rewards and Costs" href="reward.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wandb.html" title="Setup of W&amp;B"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="reward.html" title="Rewards and Costs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Environment</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="environment">
+<h1>Environment<a class="headerlink" href="#environment" title="Permalink to this headline">¶</a></h1>
+<p>The environment RallyAI is built within is based off of OpenAI’s <a class="reference external" href="https://gym.openai.com/docs/">Gym environments</a>. By doing this, we are able to use open source reinforcement learning packages like <a class="reference external" href="https://github.com/hill-a/stable-baselines">stable baselines (TF1.14)</a> or <a class="reference external" href="https://github.com/DLR-RM/stable-baselines3">stable baselines (PyTorch)</a>.</p>
+<p>To define your own custom gym environment, you need to define five things</p>
+<ul class="simple">
+<li><p>Action Space</p></li>
+<li><p>Observation Space</p></li>
+<li><p>Step function</p></li>
+<li><p>Reset function</p></li>
+<li><p>Render function</p></li>
+</ul>
+<p>The step function completed a single training step where RallyAI interacts with the environment. This includes updating observations and logging information.</p>
+<p>The reset function resets the parameters to an initial state. In our case we have a soft reset that is used to reinitialized the vehicle, as well as a hard reset that is used between each episode.</p>
+<p>The render function can be used to visualize the steps taken by RallyAI during training, though we do this through our simulation which is not included in the render function as of yet.</p>
+<div class="section" id="action-space">
+<h2>Action Space<a class="headerlink" href="#action-space" title="Permalink to this headline">¶</a></h2>
+<p>The action space defines the number of outputs from the neural network. We have created a schedule of learning goals, each with a defined test case. The initial test case has an action space of dimension 1, which we apply to the vehicle’s steering angle. Specifically the requested steering angle, since we are limited by the motors reaction speed.</p>
+<p>In later test cases, we may introduce additional actions like</p>
+<ul class="simple">
+<li><p>Torque</p></li>
+<li><p>Brake</p></li>
+<li><p>Multiple wheel controls</p></li>
+<li><p>etc</p></li>
+</ul>
+</div>
+<div class="section" id="observation-space">
+<h2>Observation Space<a class="headerlink" href="#observation-space" title="Permalink to this headline">¶</a></h2>
+<p>The observation space defines the number of inputs to the neural network. As we attempt to optimize learning in each test case, we are adding/removing environment states to the observation space. For example, we have considered</p>
+<ul class="simple">
+<li><p>User inputs</p></li>
+<li><p>IMU data</p></li>
+<li><p>Desired states (advisor model)</p></li>
+<li><p>Distance to gate (gate model)</p></li>
+<li><p>etc</p></li>
+</ul>
+<p>This is currently a very fluid aspect of RallyAI.</p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Environment</a><ul>
+<li><a class="reference internal" href="#action-space">Action Space</a></li>
+<li><a class="reference internal" href="#observation-space">Observation Space</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="reward.html"
+                        title="previous chapter">Rewards and Costs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="wandb.html"
+                        title="next chapter">Setup of W&amp;B</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/environment.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="wandb.html" title="Setup of W&amp;B"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="reward.html" title="Rewards and Costs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Environment</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

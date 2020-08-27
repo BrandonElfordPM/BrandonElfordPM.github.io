@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RallyAI.envs package &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SimClass package" href="SimClass.html" />
+    <link rel="prev" title="ROS" href="ros.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimClass.html" title="SimClass package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ros.html" title="ROS"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RallyAI.envs package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rallyai-envs-package">
+<h1>RallyAI.envs package<a class="headerlink" href="#rallyai-envs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-RallyAI.envs.RallyAI_env">
+<span id="class-rallyai-env"></span><h2>Class RallyAI_env<a class="headerlink" href="#module-RallyAI.envs.RallyAI_env" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv">
+<em class="property">class </em><code class="sig-prename descclassname">RallyAI.envs.RallyAI_env.</code><code class="sig-name descname">RallyAIEnv</code><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gym.core.Env</span></code></p>
+<p>RallyAI is a DNN which accepts sensor data about the area surrounding the car, and the current state of the car, 
+and aims to follow the input instructions. This includes the correcting outside forces, resulting from 
+extreme conditions, or advanced driving maneouvers. The key is that the AI will “Follow the User’s path”
+and will not make it’s own decisions on the direction or speed of the vehicle.</p>
+<p>This is a custom OpenAI gym environment, which includes tailored functions for stepping through the environment, 
+rendoring each step, calculating a reward for the RL algorithm and resetting once an episode is done.</p>
+<p>The updated action and observation spaces, along with the reward 
+function, can be found at the following link:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://docs.google.com/document/d/1yjIrAkPV8bbctkYULEsw4zAM6ik8zAfjlXaI1mnUYMc">https://docs.google.com/document/d/1yjIrAkPV8bbctkYULEsw4zAM6ik8zAfjlXaI1mnUYMc</a></p>
+</div></blockquote>
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.get_reward">
+<code class="sig-name descname">get_reward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">log</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.get_reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get reward for current states and actions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action</strong> (<em>Pandas DataFrame</em>) – Set of actions comming from the NN.</p></li>
+<li><p><strong>log</strong> (<em>Boolean</em>) – True if you want to log to wandb.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(Step reward, Reset simulation).</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(float, boolean)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.log_handler">
+<code class="sig-name descname">log_handler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actions</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.log_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs to WandB / console. If constants.run_on_aws is true, logs
+will be printed directly to console. Logs will be sent to WandB
+otherwise.</p>
+<dl class="simple">
+<dt>Logs:</dt><dd><ul class="simple">
+<li><p>user inputs,</p></li>
+<li><p>vehicle states,</p></li>
+<li><p>actions,</p></li>
+<li><p>expert states - if advisor reward is selected</p></li>
+<li><p>next gate position - if gate reward is selected</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actions</strong> (<em>Pandas Dataframe</em>) – Actions proposed by the neural network.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.render">
+<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'human'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders time step and current state of environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets environment variables and simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Initial state</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.soft_reset">
+<code class="sig-name descname">soft_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.soft_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the environment variables, but not the step count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.step">
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update states on simulation, evaluate actions, get reward…</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> (<em>Numpy array</em>) – Set of actions to act on.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Observations, Reward, Done, Info</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[Numpy array, float, boolean, dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.update_advisor_sim">
+<code class="sig-name descname">update_advisor_sim</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.update_advisor_sim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update reference simulation - the one used as expert driver</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.update_gate">
+<code class="sig-name descname">update_gate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.update_gate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the next gate coordinates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.update_reward_params">
+<code class="sig-name descname">update_reward_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.update_reward_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Curriculum learning - updates the standard deviation every time an episode reward
+value is reached. Makes the problem more challenging, by refining results.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="RallyAI.envs.RallyAI_env.RallyAIEnv.update_states">
+<code class="sig-name descname">update_states</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">action</span></em><span class="sig-paren">)</span><a class="headerlink" href="#RallyAI.envs.RallyAI_env.RallyAIEnv.update_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update all observations (current states) using current actions and
+results from simulation step.
+:param action: Actions comming from the NN, see common.defs for further explanation.
+:type action: Pandas DataFrame</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">RallyAI.envs package</a><ul>
+<li><a class="reference internal" href="#module-RallyAI.envs.RallyAI_env">Class RallyAI_env</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ros.html"
+                        title="previous chapter">ROS</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SimClass.html"
+                        title="next chapter">SimClass package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/RallyAI.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimClass.html" title="SimClass package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ros.html" title="ROS"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">RallyAI.envs package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

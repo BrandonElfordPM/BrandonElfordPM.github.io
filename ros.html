@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROS &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="RallyAI.envs package" href="RallyAI.html" />
+    <link rel="prev" title="Useful Links" href="useful_links.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="RallyAI.html" title="RallyAI.envs package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="useful_links.html" title="Useful Links"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ROS</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ros">
+<h1>ROS<a class="headerlink" href="#ros" title="Permalink to this headline">¶</a></h1>
+<p>The NewtonRC utilizes a ROS network to connect RallyAI and the phsyical vehicle. The GWagon will have a similar network, but using ROS2. The connections consist of a network of nodes. Each node can publish information over a topic (think of this as a radio station) or subscribe to said topic.</p>
+<div class="section" id="install-ros">
+<h2>Install ROS<a class="headerlink" href="#install-ros" title="Permalink to this headline">¶</a></h2>
+<p>To install ROS on your machine, follow the instructions <a class="reference external" href="http://wiki.ros.org/melodic/Installation/Ubuntu">here</a>. RallyAI requires the ROS package to be at least the <code class="code docutils literal notranslate"><span class="pre">ros-melodic-desktop</span></code>. Once it is installed, we can begin setup.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please refer to <a class="reference external" href="https://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment">this</a> ROS tutorial if you have any problems with your installation or setup.</p>
+</div>
+</div>
+<div class="section" id="setup-ros">
+<h2>Setup ROS<a class="headerlink" href="#setup-ros" title="Permalink to this headline">¶</a></h2>
+<p>First, we need to <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">/opt/ros/melodic/setup.bash</span></code>. Initialize a workspace and within, create a directory named <code class="code docutils literal notranslate"><span class="pre">src</span></code>. Then, from within the workspace, initialize the workspace with <code class="code docutils literal notranslate"><span class="pre">catkin_make</span></code>. This generates the files necessary for a ROS workspace.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Sourcing ROS is necessary in each new terminal that is opened. If you consider this to be annoying, as I do, you can add the source command directly to the bashrc file with <code class="code docutils literal notranslate"><span class="pre">echo</span> <span class="pre">&quot;source</span> <span class="pre">/opt/ros/melodic/setup.bash&quot;</span> <span class="pre">&gt;&gt;</span> <span class="pre">~/.bashrc</span></code> (if using Ubuntu OS).</p>
+</div>
+<p>Now we can begin to build ROS packages inside the <code class="code docutils literal notranslate"><span class="pre">src/</span></code> directory. Each subdirectory here is considered a package and RallyAI has two such packages: <code class="code docutils literal notranslate"><span class="pre">~/ws/src/messages</span></code> and <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton</span></code>. In the following sections we outline each of these packages.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In order for the files inside <code class="code docutils literal notranslate"><span class="pre">newton/</span></code> to access the msg files in <code class="code docutils literal notranslate"><span class="pre">messages/</span></code> we must source from the workspace directly with <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">./devel/setup.bash</span></code>. This can also be added to the bachrc file with <code class="code docutils literal notranslate"><span class="pre">echo</span> <span class="pre">&quot;source</span> <span class="pre">~/ws/devel/setup.bash&quot;</span> <span class="pre">&gt;&gt;</span> <span class="pre">~/.bashrc</span></code>.</p>
+</div>
+</div>
+<div class="section" id="custom-messages">
+<h2>Custom Messages<a class="headerlink" href="#custom-messages" title="Permalink to this headline">¶</a></h2>
+<p>The package <code class="code docutils literal notranslate"><span class="pre">~/ws/src/messages/</span></code> contains the messages for the <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton/</span></code> package. The repo can be found <a class="reference external" href="https://github.com/Potential-Motors/messages">here</a> and can be simply cloned into <code class="code docutils literal notranslate"><span class="pre">~/ws/src/.</span></code>. There exist standard messages built into the ROS package, like <code class="code docutils literal notranslate"><span class="pre">Int,</span> <span class="pre">Int8,</span> <span class="pre">Float32,</span> <span class="pre">String,</span></code> etc. However ROS also allows for the definition of custom messages which work consistently between Nodes, using Python or C. It also gives us the ability to label the data within the message.</p>
+<p>The messages include</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 85%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Message</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>actions</p></td>
+<td><p>RallyAI output actions</p></td>
+</tr>
+<tr class="row-odd"><td><p>controls</p></td>
+<td><p>Message/actions sent to motors</p></td>
+</tr>
+<tr class="row-even"><td><p>determ</p></td>
+<td><p>Determistic User actions</p></td>
+</tr>
+<tr class="row-odd"><td><p>joystick_user</p></td>
+<td><p>User actions from joystick</p></td>
+</tr>
+<tr class="row-even"><td><p>sim_states</p></td>
+<td><p>State, input for simulation</p></td>
+</tr>
+<tr class="row-odd"><td><p>states</p></td>
+<td><p>State/observations, input for RallyAI</p></td>
+</tr>
+<tr class="row-even"><td><p>user</p></td>
+<td><p>User actions from steering wheel/throttles</p></td>
+</tr>
+</tbody>
+</table>
+<p>To create a new custom message, follow these steps</p>
+<ol class="arabic simple">
+<li><p>Navigate to <code class="code docutils literal notranslate"><span class="pre">ws/src/messages/msg/</span></code></p></li>
+<li><p>Create a message file, <code class="code docutils literal notranslate"><span class="pre">cust_msg.msg</span></code></p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Within the file list each data type and feature (i.e. <code class="code docutils literal notranslate"><span class="pre">dataType</span> <span class="pre">featureName</span></code>) on a new line</p></li>
+<li><p>The ‘dataType’ can be anything from stdMsgs in ROS.</p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>In the node file(s) that use <code class="code docutils literal notranslate"><span class="pre">type.msg</span></code>, add the line <code class="code docutils literal notranslate"><span class="pre">from</span> <span class="pre">messages.msg</span> <span class="pre">import</span> <span class="pre">type</span></code></p></li>
+<li><p>To initialize the message, write <code class="code docutils literal notranslate"><span class="pre">msg</span> <span class="pre">=</span> <span class="pre">cust_msg()</span></code></p></li>
+<li><p>To assign values to features, you can write <code class="code docutils literal notranslate"><span class="pre">msg.featureName</span> <span class="pre">=</span> <span class="pre">val</span></code></p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Confirm the type of <code class="code docutils literal notranslate"><span class="pre">val</span></code> is the same as that of <code class="code docutils literal notranslate"><span class="pre">featureName</span></code></p></li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><p>Navigate to the workspace directory <code class="code docutils literal notranslate"><span class="pre">ws/</span></code> and run <code class="code docutils literal notranslate"><span class="pre">catkin_build</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="control-network">
+<h2>Control Network<a class="headerlink" href="#control-network" title="Permalink to this headline">¶</a></h2>
+<p>The package <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton/</span></code> contains the ROS nodes which comprise the nodes in the network. For this package, you will have to compile all the nodes seperately and build the package. This is explained in the section below. The list of nodes in this package are in the table below.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 54%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Nodes</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>File Location</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Driver Experience Module</p></td>
+<td><p>Driver experience module, contains user input modules</p></td>
+<td><p>Potential-Motors/DEM/DEM_Node.py</p></td>
+</tr>
+<tr class="row-odd"><td><p>Path Interpreter</p></td>
+<td><p>Inpterprets the path based off of the user inputs and current state of the vehicle</p></td>
+<td><p>Potential-Motors/Path-Interpreter/PathInterp.py</p></td>
+</tr>
+<tr class="row-even"><td><p>Deterministic</p></td>
+<td><p>Deterministically controls the vehicle</p></td>
+<td><p>Potential-Motors/Deterministic/DetermCode.py</p></td>
+</tr>
+<tr class="row-odd"><td><p>RallyAI</p></td>
+<td><p>Controls the vehicke using RallyAI</p></td>
+<td><p>Potential-Motors/RallyAI_Node/tc_0a.py (tmp)</p></td>
+</tr>
+<tr class="row-even"><td><p>SafetySVS</p></td>
+<td><p>Accepts the actions from RallyAI and determines if they are safe</p></td>
+<td><p>Potential-Motors/SafetySVS/SafetySVS.py</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simulation</p></td>
+<td><p>Contains the bicycle simulation for visualization, if not implemented/testing in Newton</p></td>
+<td><p>N/A</p></td>
+</tr>
+<tr class="row-even"><td><p>Motor/Servo</p></td>
+<td><p>Sends controls to motor servos</p></td>
+<td><p>N/A</p></td>
+</tr>
+</tbody>
+</table>
+<p>As mentioned above, these nodes communicate with one another by listening and sending information across <cite>topics</cite>.</p>
+<p>For example, one such topic is called the <cite>/UserTopic</cite> and the DEM node sends the driver’s inputs across this signal. The path interpreter node listens to the same topic, and uses the information it recieves to compute the current path of the vehicle. To see the full network of topics and nodes, please checkout our miro board <a class="reference external" href="https://miro.com/app/board/o9J_kurdiDQ=/?moveToWidget=3074457349396501557&amp;cot=12">ROS Architecture</a>.</p>
+<p>Below is a diagram of the Newton’s ROS network, with topics and messages included. Nodes and topics in red have not yet been implemented.</p>
+<a class="reference external image-reference" href="https://miro.com/app/board/o9J_kurdiDQ=/?moveToWidget=3074457349436907449&amp;cot=12"><img alt="ROS Network for Newton" class="align-center" src="_images/ROS_Newton_network.png" style="width: 900px;" /></a>
+<p>Clicking on the image above sends you to the diagram on Miro.</p>
+</div>
+<div class="section" id="building-projects">
+<h2>Building Projects<a class="headerlink" href="#building-projects" title="Permalink to this headline">¶</a></h2>
+<p>Inside the workspace dir <code class="code docutils literal notranslate"><span class="pre">~/ws/src/</span></code>, we will create a package using the command below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>catkin_create_pkg proj_name rospy std_msgs messages
+</pre></div>
+</div>
+<p>In our case, we chose the project name to be <code class="code docutils literal notranslate"><span class="pre">newton</span></code>. The strings following the project name consist of the packagesNow navigate to <code class="code docutils literal notranslate"><span class="pre">/newton/src/</span></code> and download the files from the node table above. Also download the weights for RallyAI that are also inside <code class="code docutils literal notranslate"><span class="pre">Potential-Motors/RallyAI_Node/</span></code> with the same name as the RallyAI node.</p>
+<p>After this step, the entire workspace should have the following structure.</p>
+<a class="reference internal image-reference" href="_images/ros_file_structure.png"><img alt="ROS workspace architecure for RallyAI" class="align-center" src="_images/ros_file_structure.png" style="width: 300px;" /></a>
+<p>Lastly, within <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton/</span></code>, we must edit two files (<code class="code docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> and <code class="code docutils literal notranslate"><span class="pre">package.xml</span></code>) to allow access to the custom messages.</p>
+<p>Inside <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton/CMakteLists.txt</span></code>, there are a number of changes we need to make. Note that some of the functions need to be uncommented. Follow the list below.</p>
+<ol class="arabic simple">
+<li><p>Under the function <code class="code docutils literal notranslate"><span class="pre">find_package(...)</span></code>, add <code class="code docutils literal notranslate"><span class="pre">message_generation</span></code> and <code class="code docutils literal notranslate"><span class="pre">messages</span></code> within the brackets</p></li>
+<li><p>Uncomment the function <code class="code docutils literal notranslate"><span class="pre">generate_messages</span></code> and the lines withing the brakctes</p></li>
+<li><p>Inside the function <code class="code docutils literal notranslate"><span class="pre">catkin_package(...)</span></code> uncomment the line <code class="code docutils literal notranslate"><span class="pre">CATKIN_DEPENDS</span></code> and add <code class="code docutils literal notranslate"><span class="pre">message_runtime</span></code> to the end of the line</p></li>
+</ol>
+<p>Inside <code class="code docutils literal notranslate"><span class="pre">~/ws/src/newton/package.xml</span></code>, we only need to uncomment the lines</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;build_depend&gt;message_generation&lt;/build_depend&gt;
+...
+&lt;exec_depend&gt;message_runtime&lt;/exec_depend&gt;
+</pre></div>
+</div>
+<p>Finally, we can back out to the workspace directory and run <code class="code docutils literal notranslate"><span class="pre">catkin_make</span></code></p>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>To run the entire network, please follow the commands below. Notice each numbered step requires it’s own terminal window.</p>
+<ol class="arabic simple" start="0">
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">roscore</span></code></p></li>
+<li><p>Plug the steering wheel into your computer</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">DEM.py</span></code></p></li>
+<li><p>Follow the instructions in the terminal</p></li>
+<li><p>The default driving mode is deterministic, please press the circle button to switch to AI mode</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">PathInerp.py</span></code></p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">DetermCode.py</span></code></p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">RallyAI_node.py</span></code></p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>Replace <code class="code docutils literal notranslate"><span class="pre">RallyAI_node</span></code> with the test case you’d like to load in (i.e. <code class="code docutils literal notranslate"><span class="pre">tc_0a.py</span></code>)</p></li>
+</ol>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">SafetySVS.py</span></code></p></li>
+<li><p>Run the simulation or hardware node</p></li>
+</ol>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li><p>(Sim)  Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">BicycleSim.py</span></code></p></li>
+<li><p>(Real) Run <code class="code docutils literal notranslate"><span class="pre">python</span> <span class="pre">VHI_Beaglebone.py</span></code></p></li>
+</ol>
+</div></blockquote>
+<p>If everything is working properly, you should be able to control the simulation or Newton hardware from the steering wheel plugged into the computer.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To see what information is being sent over any topic, you can open a new terminal and simply write <code class="code docutils literal notranslate"><span class="pre">rostopic</span> <span class="pre">echo</span> <span class="pre">/ROSTopic</span></code> and insert any of the topics defined above.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ROS</a><ul>
+<li><a class="reference internal" href="#install-ros">Install ROS</a></li>
+<li><a class="reference internal" href="#setup-ros">Setup ROS</a></li>
+<li><a class="reference internal" href="#custom-messages">Custom Messages</a></li>
+<li><a class="reference internal" href="#control-network">Control Network</a></li>
+<li><a class="reference internal" href="#building-projects">Building Projects</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="useful_links.html"
+                        title="previous chapter">Useful Links</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="RallyAI.html"
+                        title="next chapter">RallyAI.envs package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ros.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="RallyAI.html" title="RallyAI.envs package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="useful_links.html" title="Useful Links"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ROS</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

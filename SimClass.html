@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimClass package &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="common package" href="common.html" />
+    <link rel="prev" title="RallyAI.envs package" href="RallyAI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="common package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="RallyAI.html" title="RallyAI.envs package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SimClass package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simclass-package">
+<h1>SimClass package<a class="headerlink" href="#simclass-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SimClass.SimClass">
+<span id="class-simclass"></span><h2>Class SimClass<a class="headerlink" href="#module-SimClass.SimClass" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimClass.SimClass.SimClass">
+<em class="property">class </em><code class="sig-prename descclassname">SimClass.SimClass.</code><code class="sig-name descname">SimClass</code><a class="headerlink" href="#SimClass.SimClass.SimClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class describing the basic communication between simulation and
+RL agent.</p>
+<p>Whenever a new simulator is available, we need to create a new implementation
+of SimClass for working with that specific simulator. Once implemented, you
+just need to create a new instance of that implementation inside RallyAI_env.py.
+No need for more adjustments.</p>
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.exit_engine">
+<em class="property">abstract </em><code class="sig-name descname">exit_engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.exit_engine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close communication with the simulator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.get_state_dots">
+<em class="property">abstract </em><code class="sig-name descname">get_state_dots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.get_state_dots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last changes in vehicle’s states: position, velocity, 
+acceleration and rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Last changes in states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.get_states">
+<em class="property">abstract </em><code class="sig-name descname">get_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.get_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vehicle’s updated states: position, velocity, acceleration and
+rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Updated states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.request_actions">
+<em class="property">abstract </em><code class="sig-name descname">request_actions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actions</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.request_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request a new value for Torque, Brake and Steering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actions</strong> (<em>Pandas DataFrame</em>) – Set of requested actions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.sim_reset">
+<em class="property">abstract </em><code class="sig-name descname">sim_reset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">custom</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.sim_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>custom</strong> (<em>Pandas DataFrame</em>) – When set to None, reset all initial values to zero.
+Otherwise, custom contains initial values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClass.SimClass.sim_step">
+<em class="property">abstract </em><code class="sig-name descname">sim_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClass.SimClass.sim_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the simulator, update every single variable to
+be accessed from it.</p>
+<p>Implement communication to/from simulator inside this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="class-simclassbicycle">
+<h2>Class SimClassBicycle<a class="headerlink" href="#class-simclassbicycle" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle">
+<em class="property">class </em><code class="sig-prename descclassname">SimClass.SimClassBicycle.</code><code class="sig-name descname">SimClassBicycle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vehicleMass</span><span class="o">=</span><span class="default_value">2000</span></em>, <em class="sig-param"><span class="n">frontalArea</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#SimClass.SimClass.SimClass" title="SimClass.SimClass.SimClass"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimClass.SimClass.SimClass</span></code></a></p>
+<p>Implementation of SimClass for simulation based on bicycle model.</p>
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.PIDController">
+<code class="sig-name descname">PIDController</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.PIDController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on the velocityXRef, it determines what the throttleReq should be</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.__calculateStateDots__">
+<code class="sig-name descname">__calculateStateDots__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.__calculateStateDots__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the time derivatives of the states</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.__findFx__">
+<code class="sig-name descname">__findFx__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.__findFx__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the total Force acting on the vehicle in X coordinate (body coordinate)
+unit is Newtons.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vehicleMass</span><span class="o">=</span><span class="default_value">2000</span></em>, <em class="sig-param"><span class="n">frontalArea</span><span class="o">=</span><span class="default_value">3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.__updateActionValues__">
+<code class="sig-name descname">__updateActionValues__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.__updateActionValues__" title="Permalink to this definition">¶</a></dt>
+<dd><p>updates the values of the actual actions 
+whilst considering the actions requested 
+and the time constants.</p>
+<p>the requested actions can also be updated
+via the controller(s)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.__updateStates__">
+<code class="sig-name descname">__updateStates__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.__updateStates__" title="Permalink to this definition">¶</a></dt>
+<dd><p>updates the values of the states based on the calculated time derivatives</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.done">
+<code class="sig-name descname">done</code><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.done" title="Permalink to this definition">¶</a></dt>
+<dd><p>Controllers</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.exit_engine">
+<code class="sig-name descname">exit_engine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.exit_engine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close communication with the simulator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.get_state_dots">
+<code class="sig-name descname">get_state_dots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.get_state_dots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the last changes in vehicle’s states: position, velocity, 
+acceleration and rotation. Definition of vehicle’s states in
+common/defs.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Last changes in states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.get_states">
+<code class="sig-name descname">get_states</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.get_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vehicle’s updated states: position, velocity, acceleration and
+rotation. Definition of vehicle’s states in common/defs.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Updated states.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Pandas DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.read_params">
+<code class="sig-name descname">read_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sheet_nm</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.read_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the parameters for the vehicle in the simulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sheet_nm</strong> (<em>string</em>) – The sheet name inside the parameter file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.request_actions">
+<code class="sig-name descname">request_actions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">actions</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.request_actions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Request a new value for Torque, Brake and Steering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actions</strong> (<em>Pandas DataFrame</em>) – Set of requested actions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.sim_reset">
+<code class="sig-name descname">sim_reset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">custom</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.sim_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the simulator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>custom</strong> (<em>Pandas DataFrame</em>) – When set to None, reset all initial values to zero.
+Otherwise, custom contains initial values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="SimClass.SimClassBicycle.SimClassBicycle.sim_step">
+<code class="sig-name descname">sim_step</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SimClass.SimClassBicycle.SimClassBicycle.sim_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the simulator, update every single variable to
+be accessed from it.</p>
+<p>Implement communication to/from simulator inside this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SimClass package</a><ul>
+<li><a class="reference internal" href="#module-SimClass.SimClass">Class SimClass</a></li>
+<li><a class="reference internal" href="#class-simclassbicycle">Class SimClassBicycle</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="RallyAI.html"
+                        title="previous chapter">RallyAI.envs package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="common.html"
+                        title="next chapter">common package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/SimClass.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="common package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="RallyAI.html" title="RallyAI.envs package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">SimClass package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

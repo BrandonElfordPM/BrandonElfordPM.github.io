@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rewards and Costs &#8212; RallyAI  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Environment" href="environment.html" />
+    <link rel="prev" title="Testing" href="test.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="environment.html" title="Environment"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rewards and Costs</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rewards-and-costs">
+<h1>Rewards and Costs<a class="headerlink" href="#rewards-and-costs" title="Permalink to this headline">¶</a></h1>
+<p>The current reward function(s) for RallyAI are defined below. Each method is defined further below.</p>
+<div class="section" id="advisor-model">
+<h2>Advisor Model<a class="headerlink" href="#advisor-model" title="Permalink to this headline">¶</a></h2>
+<p>When most of us learn to drive, we have an <cite>expert</cite> accompany us in the passenger seat. They may direct us how to control the car or correct us when we’ve made a mistake. This mechanism essentially makes up the advisor model.</p>
+<p>In this method, we train using two models. One being RallyAI (who is learning to drive) while the other is an advisor (that is controlled deterministically through the user). The advisor model uses a simplified simulation, one without slip or outside forces that may act on RallyAI. This way, the expert controller can describe to our RallyAI the ideal state of the vehicle as it drives. Hopefully this leads to learning of control so that the AI can correct any extreme situation to match the <cite>ideal case</cite>.</p>
+<p>For example, imagine we are driving on an icy road and as we turn the wheels begin to slip. The advisor model, which contains no ice, would not slip and RallyAI would begin to notice a discrepency in it’s current state and that of the advisor. We will denote the advisor’s states as <cite>desired states</cite> Since we want the two models to have an identical state, RallyAI would begin measures to fix this.</p>
+<p>The reward function for the advisor model is simply the sum of the normed differences of the current states and the desired states. The <cite>state of the states</cite> is still very fluid and the list of observations being considered is changing day by day.</p>
+</div>
+<div class="section" id="additional-reward-models">
+<h2>Additional Reward Models<a class="headerlink" href="#additional-reward-models" title="Permalink to this headline">¶</a></h2>
+<p>The following subsections describe orther reward functions or functions used in combination with the above reward function.</p>
+<div class="section" id="gate-model">
+<h3>Gate Model<a class="headerlink" href="#gate-model" title="Permalink to this headline">¶</a></h3>
+<p>The gate model involves running RallyAI and computing a gate we want the vehicle to pass through at time t. We use a 2 dimensional gate, eventually 3D, to compare the vehicles position in space to where we expect it. We use gaussian distribution to create a bump-shaped object in the road, where being closer to the centre of the bump returns larger rewards. The gate is updated based on the user’s inputs and velocity of the vehicle in the previous timestep.</p>
+</div>
+<div class="section" id="simplified-user-map">
+<h3>Simplified User Map<a class="headerlink" href="#simplified-user-map" title="Permalink to this headline">¶</a></h3>
+<p>This simple reward function will be used as a precursor to the above complex reward function. It is based on the difference in user/driver input and wheel states. We also shift from punishment/cost to only positive rewards by taking the gaussian (denoted <span class="math notranslate nohighlight">\(\mathbb{N}\)</span>) of the difference. Note that <span class="math notranslate nohighlight">\(||x||_2\)</span> is the Euclidean norm.</p>
+<p>The twelve wheel states (4x[torque, brake and steering angle]) are used in the reward function, as well as the three user inputs (throttle, brake pedal and steering wheel).</p>
+<p>The reward function is below.</p>
+<div class="math notranslate nohighlight">
+\[R(t) = c_t\cdot torque_{diff} + c_b\cdot brake_{diff} + c_s\cdot steer_{diff}\]</div>
+<p>where <span class="math notranslate nohighlight">\(c_t,c_b\)</span> and <span class="math notranslate nohighlight">\(c_s\)</span> are constants. Below we define the variables in the simple reward function.</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}torque_{diff} &amp;= \mathbb{N}(||usr_{thr}-fl_{tor}||_2)+\mathbb{N}(||usr_{thr}-fr_{tor}||_2)+\mathbb{N}(||usr_{thr}-rl_{tor}||_2)+\mathbb{N}(||usr_{thr}-rr_{tor}||_2\\brake_{diff} &amp;= \mathbb{N}(||usr_b-fl_b||_2)+\mathbb{N}(||usr_b-fr_b||_2)+\mathbb{N}(||usr_b-rl_b||_2)+\mathbb{N}(||usr_b-rr_b||_2)\\steer_{diff} &amp;= \mathbb{N}(||usr_{sa}-fl_{sa}||_2)+\mathbb{N}(||usr_{sa}-fr_{sa}||_2)+\mathbb{N}(||usr_{sa}-rl_{sa}||_2)+\mathbb{N}(||usr_{sa}-rr_{sa}||_2)\end{aligned}\end{align} \]</div>
+</div>
+<div class="section" id="magnified-saltatory-reward">
+<h3>Magnified Saltatory Reward<a class="headerlink" href="#magnified-saltatory-reward" title="Permalink to this headline">¶</a></h3>
+<p>Defined <a class="reference external" href="https://www.hindawi.com/journals/mpe/2019/7619483/">here</a>, the MSR algorithm magnifies <em>good</em> and <em>bad</em> rewards computed by the other function components. MSR is applied after a reward is computed, and means to accelerate positive learning. If a move results in a reward that is sufficiently better, or worse, than the previous reward, that reward is magnified to produce more good moves, and less bad moves. The algorithm is outlined in pseudo-code <a class="reference external" href="https://www.hindawi.com/journals/mpe/2019/7619483/alg1/">here</a>.</p>
+<p>The threshold of <span class="math notranslate nohighlight">\(\nu\)</span> must be explored to find the value which results in the best learning.</p>
+<p>This was attempted by Brandon earlier, but in a discrete way, whereas this method is continuous and fits better with our environment space.</p>
+</div>
+<div class="section" id="catastrophic-control-failures">
+<h3>Catastrophic Control Failures<a class="headerlink" href="#catastrophic-control-failures" title="Permalink to this headline">¶</a></h3>
+<p>Since our top priority is safety, we want to make sure the vehicle stays away from catastrophic failures, such as crashing, swerving into the other lane or leaving the road entirely. One of the ways to prevent such behaviour in an AI is by punishing the vehicle with a large negative reward.</p>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Rewards and Costs</a><ul>
+<li><a class="reference internal" href="#advisor-model">Advisor Model</a></li>
+<li><a class="reference internal" href="#additional-reward-models">Additional Reward Models</a><ul>
+<li><a class="reference internal" href="#gate-model">Gate Model</a></li>
+<li><a class="reference internal" href="#simplified-user-map">Simplified User Map</a></li>
+<li><a class="reference internal" href="#magnified-saltatory-reward">Magnified Saltatory Reward</a></li>
+<li><a class="reference internal" href="#catastrophic-control-failures">Catastrophic Control Failures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="test.html"
+                        title="previous chapter">Testing</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="environment.html"
+                        title="next chapter">Environment</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reward.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="environment.html" title="Environment"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="Testing"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">RallyAI  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Rewards and Costs</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sheila and Brandon.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>
