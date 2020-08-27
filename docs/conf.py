@@ -27,12 +27,7 @@ author = 'Sheila, Sayo and Brandon'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-if on_rtd:
-    extensions = [
-        'sphinx.ext.intersphinx',
-    ]
-else:
-    extensions = [
+extensions = [
         'sphinx.ext.intersphinx',
         'rst2pdf.pdfbuilder',
 ]
