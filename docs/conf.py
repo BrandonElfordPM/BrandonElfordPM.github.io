@@ -29,7 +29,8 @@ author = 'Sheila, Sayo and Brandon'
 # ones.
 extensions = [
 	'sphinx.ext.autodoc',
-	'rst2pdf.pdfbuilder'
+	'rst2pdf.pdfbuilder',
+	'rst2pdf'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -61,7 +62,7 @@ master_doc = 'index'
 pdf_documents = [('index',            # top-level file (index.rst)
                     'RallyAI',           # output (target.pdf)
                     'RallyAI',   # document title
-                    'Sheila and Brandon')]   # document author
+                    'Sayo, Sheila and Brandon')]   # document author
 
 
 latex_elements = {
