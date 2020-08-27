@@ -30,7 +30,7 @@ author = 'Sheila, Sayo and Brandon'
 extensions = [
 	'sphinx.ext.autodoc',
 	'rst2pdf.pdfbuilder',
-	'rst2pdf'
+	'rst2pdf.pdfbuilder'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
